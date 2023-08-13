@@ -1,7 +1,18 @@
-// Do not remove this function definition and its export
+//Do not remove this function definition and its export
 // this function should return the result of the current operation
+
+
 function calculate(expression) {
   return expression;
 }
 
 export { calculate };
+
+
+
+// function calculate(expression) {
+//   return eval(expression);
+// }
+
+// export { calculate };
+
