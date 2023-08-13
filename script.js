@@ -81,12 +81,19 @@ buttons.forEach(button => {
                     case '.':
                         // Vérifier si le point-virgule n'est pas déjà présent dans l'affichage
                         // if (! inputcontenairs.includes(".")) {
-                        if (!/\.\d*$/.test(inputcontenairs)) {
+                            validateInput() ;
+                        // if (!/\.\d*$/.test(inputcontenairs)) {
+                        //     inputcontenairs.value += '.';
+                        //     event.preventDefault();
+                            
+                        if(inputcontenairs){
                             inputcontenairs.value += '.';
                             event.preventDefault();
                             break;
-
                         }
+
+                            
+                        
                     //else{
                     //     break;
                     //     inputcontenairs.disabled = true;
@@ -96,6 +103,26 @@ buttons.forEach(button => {
         }
     });
 });
+
+function validateInput(inputcontenairs) {
+    // Vérifier si l'entrée commence ou se termine par un point
+    if (inputcontenairs.value.startsWith('.') || inputcontenairs.value.endsWith('.')) {
+      return false;
+    }
+  
+    // Vérifier si l'entrée contient plusieurs points consécutifs
+    if (inputcontenairs.includes('..')) {
+      return false;
+    }
+  
+    // Vérifier si l'entrée contient plusieurs points non consécutifs
+    const dotCount = inputcontenairs.split('.').length - 1;
+    if (dotCount > 1) {
+      return false;
+    }
+  
+    return true;
+  }
 
 
 
