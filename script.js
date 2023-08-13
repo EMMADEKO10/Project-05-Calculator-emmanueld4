@@ -13,4 +13,29 @@ let expression = '';
 inputcontenairs.disabled = true;
 // historique.style.display = none;
 
+// Ajouter un gestionnaire d'événement pour chaque bouton
+buttons.forEach(button => {
+    
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
