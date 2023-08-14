@@ -81,48 +81,41 @@ buttons.forEach(button => {
                     case '.':
                         // Vérifier si le point-virgule n'est pas déjà présent dans l'affichage
                         // if (! inputcontenairs.includes(".")) {
-                            validateInput() ;
+
+                        //  const verify = validateInput(inputcontenairs.value) ;
                         // if (!/\.\d*$/.test(inputcontenairs)) {
                         //     inputcontenairs.value += '.';
                         //     event.preventDefault();
-                            
-                        if(inputcontenairs){
-                            inputcontenairs.value += '.';
-                            event.preventDefault();
-                            break;
-                        }
 
-                            
-                        
-                    //else{
-                    //     break;
-                    //     inputcontenairs.disabled = true;
-                    // }
+                        // if(!verify){
+                        //     inputcontenairs.value += '.';
+                        //     event.preventDefault();
+                        //     break;
+                        // }
+
+                        if (!inputcontenairs.value.includes('.')) {
+                            inputcontenairs.value += '.';
+
+
+
+                            //else{
+                            //     break;
+                            //     inputcontenairs.disabled = true;
+                            // }
+                        }
                 }
             }
         }
     });
 });
 
-function validateInput(inputcontenairs) {
-    // Vérifier si l'entrée commence ou se termine par un point
-    if (inputcontenairs.value.startsWith('.') || inputcontenairs.value.endsWith('.')) {
-      return false;
-    }
-  
-    // Vérifier si l'entrée contient plusieurs points consécutifs
-    if (inputcontenairs.includes('..')) {
-      return false;
-    }
-  
-    // Vérifier si l'entrée contient plusieurs points non consécutifs
-    const dotCount = inputcontenairs.split('.').length - 1;
-    if (dotCount > 1) {
-      return false;
-    }
-  
-    return true;
-  }
+// function validateInput(inputcontenairs) {
+
+//         // Utiliser une expression régulière pour vérifier l'entrée
+//         const regex = /^(\d+\.)*\d+$/;
+//         return regex.test(inputcontenairs.value);
+//       }
+
 
 
 
