@@ -1,4 +1,4 @@
-// import { calculate } from './calculator.js';
+import { calculate } from './calculator.js';
 
 // TODO: Faire la manipulation du DOM dans ce fichier
 
@@ -13,50 +13,78 @@ let expression = '';
 inputcontenairs.disabled = true;
 // historique.style.display = none;
 
+
 // Ajouter un gestionnaire d'événement pour chaque bouton
 buttons.forEach(button => {
     button.addEventListener('click', event => {
         const buttonValue = button.textContent;
 
         // Vérifier si le bouton est un chiffre ou un opérateur
+
         if (buttonValue >= '0' && buttonValue <= '9') {
             // Ajouter le chiffre au champ de saisie
-            inputcontenairs.value += buttonValue;
+            if(inputcontenairs.value === '' && historique.textContent.includes('0')){
+                
+            }else{
+                if (!historique.textContent.includes('=')) {
+                    expression += buttonValue;
+                    inputcontenairs.value += buttonValue;
+                    historique.textContent += buttonValue;
+                } else {
+                    inputcontenairs.value = '';
+                    historique.textContent = '';
+                    expression = '';
+                    inputcontenairs.value += buttonValue;
+                    historique.textContent += buttonValue;
+                    expression += buttonValue;
+                }
+    
+            }
+
+           
         } else {
             // Vérifier si le champ de saisie n'est pas vide
+
             if (inputcontenairs.value !== '') {
                 //  Vérifier l'opérateur et effectuer le calcul correspondant
                 switch (buttonValue) {
                     case '+':
-                        inputcontenairs.value += '+';
+                        inputcontenairs.value = '';
+                        historique.textContent += " + ";
+                        expression += '+';
                         event.preventDefault();
                         break;
                     case '-':
-                        inputcontenairs.value += '-';
+                        inputcontenairs.value = '';
+                        historique.textContent += " - ";
+                        expression += ' - ';
                         event.preventDefault();
                         break;
                     case '×':
-                        inputcontenairs.value += '*';
+                        inputcontenairs.value = '';
+                        historique.textContent += " * ";
+                        expression += '*';
                         event.preventDefault();
                         break;
                     case '÷':
-                        inputcontenairs.value += '/';
+                        inputcontenairs.value = '';
+                        historique.textContent += " ÷ "
+                        expression += '/';
                         event.preventDefault();
                         break;
                     case '%':
-                        inputcontenairs.value = eval(inputcontenairs.value) / 100;;
+                        inputcontenairs.value = eval(expression) / 100;
+                        historique.textContent += "% "
                         event.preventDefault();
                         break;
-                    case 'x²':
-                        inputcontenairs.value = inputcontenairs.value * inputcontenairs.value;
-                        event.preventDefault();
-                        break;
+
                     case '=':
                         //// Évaluer l'expression mathématique et afficher le résultat
-                        historique.textContent = inputcontenairs.value + "=" + eval(inputcontenairs.value) + "\n";
+                        historique.textContent += " = " + eval(expression);
                         // historique.insertAdjacentHTML('beforeend', '<br>');
-                        inputcontenairs.value = eval(inputcontenairs.value);
+                        inputcontenairs.value = eval(expression);
 
+                        expression = eval(expression);
 
                         event.preventDefault();
 
@@ -65,76 +93,45 @@ buttons.forEach(button => {
                     case 'AC':
                         //Effacer le champ de saisie
                         inputcontenairs.value = '';
+                        historique.textContent = " ";
+                        expression = '';
                         event.preventDefault();
                         break;
                     case 'C':
                         // Supprimer le dernier caractère du champ de saisie
+
                         inputcontenairs.value = inputcontenairs.value.slice(0, -1);
+                        expression = inputcontenairs.value;
                         event.preventDefault();
                         break;
                     case '+/-':
                         // Inverser le signe du nombre dans le champ de saisie
                         inputcontenairs.value = -inputcontenairs.value;
+                        expression = -expression;
                         event.preventDefault();
                         break;
 
                     case '.':
-                        // Vérifier si le point-virgule n'est pas déjà présent dans l'affichage
-                        // if (! inputcontenairs.includes(".")) {
-
-                        //  const verify = validateInput(inputcontenairs.value) ;
-                        // if (!/\.\d*$/.test(inputcontenairs)) {
-                        //     inputcontenairs.value += '.';
-                        //     event.preventDefault();
-
-                        // if(!verify){
-                        //     inputcontenairs.value += '.';
-                        //     event.preventDefault();
-                        //     break;
-                        // }
 
                         if (!inputcontenairs.value.includes('.')) {
                             inputcontenairs.value += '.';
+                            historique.textContent += ".";
+                            expression += '.';
 
-
-
-                            //else{
-                            //     break;
-                            //     inputcontenairs.disabled = true;
-                            // }
                         }
                 }
+            } else if (buttonValue === 'AC') {
+                inputcontenairs.value = '';
+                historique.textContent = " ";
+                expression = '';
+            } else if (buttonValue >= '0' && buttonValue <= '9' && historique.textContent.includes('=')) {
+
+                expression = calculate(expression);
+                historique.textContent = expression;
+
             }
         }
+        console.log(expression);
     });
 });
-
-// function validateInput(inputcontenairs) {
-
-//         // Utiliser une expression régulière pour vérifier l'entrée
-//         const regex = /^(\d+\.)*\d+$/;
-//         return regex.test(inputcontenairs.value);
-//       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
