@@ -9,6 +9,7 @@ const historique = document.querySelector('p');
 let expression = '';
 let affichageHist = "";
 let operator = "";
+var verifSigne = false;
 
 //Bloquer le display pour n'entrer que les valeurs via les bouttons.
 inputcontenairs.disabled = true;
@@ -18,9 +19,10 @@ inputcontenairs.disabled = true;
 buttons.forEach(button => {
     button.addEventListener('click', event => {
         const buttonValue = button.textContent;
-        const number1 = "";
-        const number2 = "";
-        
+        // const number1 = "";
+        // const number2 = "";
+       
+        // verifSigne = false;
         
 
         // Vérifier si le bouton est un chiffre ou un opérateur
@@ -30,7 +32,7 @@ buttons.forEach(button => {
             if (inputcontenairs.value === '0' && buttonValue === '0') {
                 inputcontenairs.value = inputcontenairs.value;
                 affichageHist = buttonValue;
-
+                verifSigne = false;
             } else if(inputcontenairs.value === '0'){
                 inputcontenairs.value = buttonValue;
                 // historique.textContent = buttonValue;
@@ -63,13 +65,14 @@ buttons.forEach(button => {
 
         } else {
             // Vérifier si le champ de saisie n'est pas vide
+            
             operator += buttonValue;
             if (inputcontenairs.value !== '') {
                 //  Vérifier l'opérateur et effectuer le calcul correspondant
                 switch (buttonValue) {
                     case '+':
                         inputcontenairs.value = '';
-                        
+                        verifSigne = true;
                         if (!historique.textContent.includes('=')) {
                             historique.textContent = affichageHist + " + "
                         } else {
@@ -80,6 +83,7 @@ buttons.forEach(button => {
                         event.preventDefault();
                         break;
                     case '-':
+                        verifSigne = true;
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
                             historique.textContent = affichageHist +  " - "
@@ -91,6 +95,7 @@ buttons.forEach(button => {
                         event.preventDefault();
                         break;
                     case '×':
+                        verifSigne = true;
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
                             historique.textContent = affichageHist + " * "
@@ -102,6 +107,7 @@ buttons.forEach(button => {
                         event.preventDefault();
                         break;
                     case '÷':
+                        verifSigne = true;
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
                             historique.textContent = affichageHist + " ÷ "
@@ -121,11 +127,16 @@ buttons.forEach(button => {
                     case '=':
                         if (!historique.textContent.includes('=')) {
                             //// Évaluer l'expression mathématique et afficher le résultat
-                            historique.textContent += affichageHist + " = "
-                            // historique.insertAdjacentHTML('beforeend', '<br>');
-                            inputcontenairs.value = eval(expression);
-                            const valeurAdd = eval(expression);
-                            expression = eval(expression);
+                            if(!verifSigne) {
+                                historique.textContent = "";
+                            }else{
+                                historique.textContent += affichageHist + " = "
+                                // historique.insertAdjacentHTML('beforeend', '<br>');
+                                inputcontenairs.value = eval(expression);
+                                const valeurAdd = eval(expression);
+                                expression = eval(expression);
+                            }
+                           
                             event.preventDefault();
                             break;
                         } else {
@@ -160,9 +171,8 @@ buttons.forEach(button => {
 
                         if (!inputcontenairs.value.includes('.')) {
                             inputcontenairs.value += '.';
-                            // historique.textContent += ".";
+                           affichageHist += ".";
                             expression += '.';
-
                         }
                 }
             } else if (buttonValue === 'AC') {
