@@ -7,7 +7,7 @@ const inputcontenairs = document.getElementById('input');
 const buttons = document.querySelectorAll('button');
 const historique = document.querySelector('p');
 let expression = '';
-let affichageHist = '';
+let affichageHist = "";
 let operator = "";
 
 //Bloquer le display pour n'entrer que les valeurs via les bouttons.
@@ -20,6 +20,8 @@ buttons.forEach(button => {
         const buttonValue = button.textContent;
         const number1 = "";
         const number2 = "";
+        
+        
 
         // Vérifier si le bouton est un chiffre ou un opérateur
 
@@ -27,11 +29,12 @@ buttons.forEach(button => {
             // Ajouter le chiffre au champ de saisie
             if (inputcontenairs.value === '0' && buttonValue === '0') {
                 inputcontenairs.value = inputcontenairs.value;
-
+                affichageHist = buttonValue;
 
             } else if(inputcontenairs.value === '0'){
                 inputcontenairs.value = buttonValue;
-                historique.textContent = buttonValue;
+                // historique.textContent = buttonValue;
+                affichageHist = buttonValue;
             }
             else{
                 // Gérer lorsque l'utilisateur veut entre un autre exercice.
@@ -39,19 +42,22 @@ buttons.forEach(button => {
                 if (!historique.textContent.includes('=')) {
                     expression += buttonValue;
                     inputcontenairs.value += buttonValue;
+                    // affichageHist += buttonValue;
+                    // historique.textContent += buttonValue;
                     affichageHist += buttonValue;
-                    historique.textContent += buttonValue;
                      operator += buttonValue;
                 } else {
                     inputcontenairs.value = '';
-                    historique.textContent = '';
+                    // historique.textContent = '';
+                    affichageHist = ""
                     expression = '';
                     inputcontenairs.value += buttonValue;
-                    historique.textContent += buttonValue;
+                    // historique.textContent += buttonValue;
+                    affichageHist += buttonValue;
                     expression += buttonValue;
                      operator += buttonValue;
                 }
-                affichageHist += buttonValue;
+                // affichageHist += buttonValue;
             }
 
 
@@ -65,57 +71,57 @@ buttons.forEach(button => {
                         inputcontenairs.value = '';
                         
                         if (!historique.textContent.includes('=')) {
-                            historique.textContent += " + "
+                            historique.textContent = affichageHist + " + "
                         } else {
                             historique.textContent = expression + ' + ';
                         }
-
+                        affichageHist = "";
                         expression += '+';
                         event.preventDefault();
                         break;
                     case '-':
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
-                            historique.textContent += " - "
+                            historique.textContent = affichageHist +  " - "
                         } else {
-                            historique.textContent = expression + '-'
+                            historique.textContent = expression + ' - '
                         }
-
+                        affichageHist = "";
                         expression += '-';
                         event.preventDefault();
                         break;
                     case '×':
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
-                            historique.textContent += " * "
+                            historique.textContent = affichageHist + " * "
                         } else {
-                            historique.textContent = expression + '*'
+                            historique.textContent = expression + ' * '
                         }
-
+                        affichageHist = "";
                         expression += '*';
                         event.preventDefault();
                         break;
                     case '÷':
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
-                            historique.textContent += " ÷ "
+                            historique.textContent = affichageHist + " ÷ "
                         } else {
-                            historique.textContent = expression + '/'
+                            historique.textContent = expression + ' ÷ '
                         }
-
+                        affichageHist = "";
                         expression += '/';
                         event.preventDefault();
                         break;
                     case '%':
                         inputcontenairs.value = eval(expression) / 100;
-                        historique.textContent += "% "
+                        historique.textContent = inputcontenairs.value + " % "
                         event.preventDefault();
                         break;
 
                     case '=':
                         if (!historique.textContent.includes('=')) {
                             //// Évaluer l'expression mathématique et afficher le résultat
-                            historique.textContent += " = "
+                            historique.textContent += affichageHist + " = "
                             // historique.insertAdjacentHTML('beforeend', '<br>');
                             inputcontenairs.value = eval(expression);
                             const valeurAdd = eval(expression);
@@ -133,11 +139,12 @@ buttons.forEach(button => {
                         inputcontenairs.value = '';
                         historique.textContent = " ";
                         expression = '';
+                        affichageHist = "";
                         event.preventDefault();
                         break;
                     case 'C':
                         // Supprimer le dernier caractère du champ de saisie
-
+                        affichageHist = "";
                         inputcontenairs.value = inputcontenairs.value.slice(0, -1);
                         expression = inputcontenairs.value;
                         event.preventDefault();
@@ -153,7 +160,7 @@ buttons.forEach(button => {
 
                         if (!inputcontenairs.value.includes('.')) {
                             inputcontenairs.value += '.';
-                            historique.textContent += ".";
+                            // historique.textContent += ".";
                             expression += '.';
 
                         }
@@ -162,8 +169,9 @@ buttons.forEach(button => {
                 inputcontenairs.value = '';
                 historique.textContent = " ";
                 expression = '';
+                affichageHist = "";
             } else if (buttonValue >= '0' && buttonValue <= '9' && historique.textContent.includes('=')) {
-
+                affichageHist = "";
                 expression = calculate(expression);
                 historique.textContent = expression;
 
@@ -171,6 +179,7 @@ buttons.forEach(button => {
             else if (inputcontenairs.textContent === "" && isNaN(historique.textContent.slice(-1))){
                     historique.textContent = historique.textContent.slice(0, -1) + "+";
                     operator = operator.slice(0, -1) + "+";
+                    affichageHist = "";
                     // event.preventDefault();
                     }
         }
