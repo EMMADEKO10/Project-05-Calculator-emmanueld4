@@ -19,12 +19,7 @@ inputcontenairs.disabled = true;
 buttons.forEach(button => {
     button.addEventListener('click', event => {
         const buttonValue = button.textContent;
-        // const number1 = "";
-        // const number2 = "";
-       
-        // verifSigne = false;
-        
-
+    
         // Vérifier si le bouton est un chiffre ou un opérateur
 
         if (buttonValue >= '0' && buttonValue <= '9') {
@@ -155,9 +150,10 @@ buttons.forEach(button => {
                         break;
                     case 'C':
                         // Supprimer le dernier caractère du champ de saisie
-                        affichageHist = "";
+                        affichageHist = affichageHist.slice(0, -1);
                         inputcontenairs.value = inputcontenairs.value.slice(0, -1);
-                        expression = inputcontenairs.value;
+                        expression = expression.slice(0, -1);
+                        
                         event.preventDefault();
                         break;
                     case '+/-':
