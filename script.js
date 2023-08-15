@@ -27,7 +27,7 @@ buttons.forEach(button => {
 
         if (buttonValue >= '0' && buttonValue <= '9') {
             // Ajouter le chiffre au champ de saisie
-            if(historique.textContent.includes("+")||historique.textContent.includes("-")||historique.textContent.includes("÷") ||historique.textContent.includes("")){
+            if(historique.textContent.includes("+")||historique.textContent.includes("-")||historique.textContent.includes("÷") ||historique.textContent.includes("*")){
                 value += buttonValue;
             }
             
