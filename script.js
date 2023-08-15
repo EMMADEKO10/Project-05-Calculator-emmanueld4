@@ -45,7 +45,7 @@ buttons.forEach(button => {
                      operator += buttonValue;
                 } else {
                     inputcontenairs.value = '';
-                    // historique.textContent = '';
+                    historique.textContent = '';
                     affichageHist = ""
                     expression = '';
                     inputcontenairs.value += buttonValue;
@@ -128,7 +128,7 @@ buttons.forEach(button => {
                                 historique.textContent += affichageHist + " = "
                                 // historique.insertAdjacentHTML('beforeend', '<br>');
                                 inputcontenairs.value = eval(expression);
-                                const valeurAdd = eval(expression);
+                                // const valeurAdd = eval(expression);
                                 expression = eval(expression);
                             }
                            
@@ -160,6 +160,7 @@ buttons.forEach(button => {
                         // Inverser le signe du nombre dans le champ de saisie
                         inputcontenairs.value = -inputcontenairs.value;
                         expression = -expression;
+                        affichageHist = -affichageHist;
                         event.preventDefault();
                         break;
 
@@ -180,14 +181,15 @@ buttons.forEach(button => {
                 affichageHist = "";
                 expression = calculate(expression);
                 historique.textContent = expression;
+                expression += buttonValue;
 
             }
-            else if (inputcontenairs.textContent === "" && isNaN(historique.textContent.slice(-1))){
-                    historique.textContent = historique.textContent.slice(0, -1) + "+";
-                    operator = operator.slice(0, -1) + "+";
-                    affichageHist = "";
-                    // event.preventDefault();
-                    }
+            // else if (inputcontenairs.textContent === "" && isNaN(historique.textContent.slice(-1))){
+            //         historique.textContent = historique.textContent.slice(0, -1) + "+";
+            //         operator = operator.slice(0, -1) + "+";
+            //         affichageHist = "";
+            //         // event.preventDefault();
+            //         }
         }
         console.log(expression);
     });
