@@ -23,9 +23,9 @@ buttons.forEach(button => {
 
         if (buttonValue >= '0' && buttonValue <= '9') {
             // Ajouter le chiffre au champ de saisie
-            if (inputcontenairs.value === '0' && buttonValue === '0') {
+            if(inputcontenairs.value === '0' && buttonValue ==='0'){
                 inputcontenairs.value = inputcontenairs.value;
-            } else {
+            }else{
                 if (!historique.textContent.includes('=')) {
                     expression += buttonValue;
                     inputcontenairs.value += buttonValue;
@@ -38,54 +38,61 @@ buttons.forEach(button => {
                     historique.textContent += buttonValue;
                     expression += buttonValue;
                 }
-
+    
             }
 
-
+           
         } else {
             // Vérifier si le champ de saisie n'est pas vide
-            const lastChar = expression.slice(-1);
+
             if (inputcontenairs.value !== '') {
                 //  Vérifier l'opérateur et effectuer le calcul correspondant
                 switch (buttonValue) {
                     case '+':
-                        if (!historique.includes(':', '*', '+', '-')) {
-                            historique.textContent += " + ";
-                            expression += '+';
-                        }else {
-                            
-                        }
+                        // if(inputcontenairs.value.includes(':','*', '+', ))
                         inputcontenairs.value = '';
+                        if (!historique.textContent.includes('=')){
+                            historique.textContent += " + "
+                        }else{
+                            historique.textContent = expression + '+'
+                        }
+                        
+                        expression += '+';
                         event.preventDefault();
                         break;
                     case '-':
                         inputcontenairs.value = '';
-                        historique.textContent += " - ";
-                        expression += ' - ';
+                        if (!historique.textContent.includes('=')){
+                            historique.textContent += " - "
+                        }else{
+                            historique.textContent = expression + '-'
+                        }
+                        
+                        expression += '-';
                         event.preventDefault();
                         break;
                     case '×':
                         inputcontenairs.value = '';
-                        historique.textContent += " * ";
+                        if (!historique.textContent.includes('=')){
+                            historique.textContent += " * "
+                        }else{
+                            historique.textContent = expression + '*'
+                        }
+                        
                         expression += '*';
                         event.preventDefault();
                         break;
                     case '÷':
                         inputcontenairs.value = '';
-                        if (!isNaN(lastChar)) {
+                        if (!historique.textContent.includes('=')){
                             historique.textContent += " ÷ "
-                            expression += '/';
-                            event.preventDefault();
-
-                        } else {
-                            lastChar = '/';
-                            // inputcontenairs.slice(-1) = '÷';
-                            // historique.textContent.slice(-1) += " ÷ ";
-                            event.preventDefault();
+                        }else{
+                            historique.textContent = expression + '/'
                         }
-
+                        
+                        expression += '/';
+                        event.preventDefault();
                         break;
-
                     case '%':
                         inputcontenairs.value = eval(expression) / 100;
                         historique.textContent += "% "
@@ -93,21 +100,21 @@ buttons.forEach(button => {
                         break;
 
                     case '=':
-                        if (!historique.textContent.includes('=')) {
-                            //// Évaluer l'expression mathématique et afficher le résultat
-                            historique.textContent += " = "
-                            // historique.insertAdjacentHTML('beforeend', '<br>');
-                            inputcontenairs.value = eval(expression);
-                            const valeurAdd = eval(expression);
-                            expression = eval(expression);
-                            event.preventDefault();
-                            break;
-                        } else {
+                        if(!historique.textContent.includes('=')){
+                             //// Évaluer l'expression mathématique et afficher le résultat
+                        historique.textContent += " = " 
+                        // historique.insertAdjacentHTML('beforeend', '<br>');
+                        inputcontenairs.value = eval(expression);
+                        const valeurAdd = eval(expression);
+                        expression = eval(expression);
+                        event.preventDefault();
+                        break;
+                        }else {
                             expression = eval(valeurAdd + expression);
                             break;
                         }
-
-
+                       
+                       
                     case 'AC':
                         //Effacer le champ de saisie
                         inputcontenairs.value = '';
