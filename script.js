@@ -77,16 +77,27 @@ buttons.forEach(button => {
                 //  Vérifier l'opérateur et effectuer le calcul correspondant
                 switch (buttonValue) {
                     case '+':
-                        expreChar +=buttonValue;  
+                        if (Number.isNaN(Number(buttonValue))) {
+
+                            // La chaîne n'est pas un nombre, remplacer le dernier caractère
+                            expression = expression.slice(0, -1) + "+";
+                            expreChar = "+";
+                            // event.preventDefault();
+                          }
+            
+                        
                         inputcontenairs.value = '';
                         verifSigne = true;
                         if (!historique.textContent.includes('=')) {
                             historique.textContent = affichageHist + " + ";
                         } else {
                             historique.textContent = expression + ' + ';
+                            inputcontenairs.value = value;
                         }
                         affichageHist = "";
                         expression += '+';
+                        expreChar += "+";  
+                
                         event.preventDefault();
                         break;
                     case '-':
@@ -153,19 +164,19 @@ buttons.forEach(button => {
                                 break;
                             } else {
                                 // expression = eval(valeurAdd + expression);
-                                historique.textContent =expression + expreChar + value + " = "
+                                historique.textContent =expression + " "+expreChar + " " + value + " = "
                                 expression = eval(expression + expreChar+ value);
                                 inputcontenairs.value = eval(expression); 
                                 event.preventDefault();
                                 break;
                             }
                         }else{
-                            inputcontenairs.value = buttonValue;
+                            inputcontenairs.value =inputcontenairs.value ;
                             // historique.textContent = "";
                             // inputcontenairs.value = "";
-                        }
-                        
-
+                            event.preventDefault();
+                                break;
+                        }   
 
                     case 'AC':
                         //Effacer le champ de saisie
@@ -213,14 +224,18 @@ buttons.forEach(button => {
                 expression += buttonValue;
 
             }
-            // else if (inputcontenairs.textContent === "" && isNaN(historique.textContent.slice(-1))){
-            //         historique.textContent = historique.textContent.slice(0, -1) + "+";
-            //         operator = operator.slice(0, -1) + "+";
-            //         affichageHist = "";
-            //         // event.preventDefault();
-            //         }
+           
         }
+
+
+
+
+
         console.log(expression);
     });
+    // format.addEventListener("submit",function(event){
+    //     event.preventDefault();
+    // });
 });
+
 
