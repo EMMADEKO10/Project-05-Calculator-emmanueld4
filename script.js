@@ -59,7 +59,7 @@ buttons.forEach(button => {
                         // if(inputcontenairs.value.includes(':','*', '+', ))
                         inputcontenairs.value = '';
                         if (!historique.textContent.includes('=')) {
-                            historique.textContent += " + "
+                            historique.textContent += expression + " + "
                         } else {
                             historique.textContent = expression + '+'
                         }
