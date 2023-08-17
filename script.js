@@ -1,195 +1,401 @@
+
+
 import { calculate } from './calculator.js';
 
-// TODO: Faire la manipulation du DOM dans ce fichier
-
-// Récupérer les éléments de la calculatrice
-const inputcontenairs = document.getElementById('input');
+const input = document.getElementById('input');
 const buttons = document.querySelectorAll('button');
-const historique = document.querySelector('p');
+const history = document.querySelector('p');
 let expression = '';
-const isFirstNumberDisplayed = true;
 
-
-
-const form = document.querySelector('form');
-
-form.addEventListener('submit', event => {
+document.querySelector('form').addEventListener('submit', event => {
     event.preventDefault();
-
-    // Votre code de traitement ici
 });
 
-//Bloquer le display pour n'entrer que les valeurs via les bouttons.
-inputcontenairs.disabled = true;
-// historique.style.display = none;
+input.disabled = true;
 
-// Ajouter un gestionnaire d'événement pour chaque bouton
+function handleNumberInput(buttonValue) {
+    input.value = input.value === '0' ? buttonValue : input.value + buttonValue;
+    expression += buttonValue;
+    history.textContent += buttonValue;
+}
+
+function handleOperatorInput(buttonValue) {
+    input.value = '';
+    expression += buttonValue === '×' ? '*' : buttonValue === '÷' ? '/' : buttonValue;
+    history.textContent = !history.textContent.includes('=') ? `${history.textContent} ${buttonValue} ` : ` ${expression.replace(/\*/g, '×').replace(/\//g, ' ÷')} `;
+}
+
+function handlePercentInput() {
+    input.value = eval(expression) / 100;
+    history.textContent = `${eval(expression) / 100}% `;
+}
+
+function handleEqualInput() {
+    if (!history.textContent.includes('=')) {
+        expression = eval(expression);
+        input.value = expression === Infinity ? 'Error' : expression;
+        history.textContent += " = ";
+    } else {
+        expression = eval(`${expression} (${input.value})`);
+    }
+}
+
+function handleAcInput() {
+    input.value = '';
+    history.textContent = '';
+    expression = '';
+}
+
+function handleCInput() {
+    input.value = input.value.slice(0, -1);
+    expression = input.value;
+}
+
+function handleNegationInput() {
+    input.value = -input.value;
+    expression = -expression;
+}
+
+function handleDecimalInput() {
+    if (!input.value.includes('.')) {
+        input.value += '.';
+        expression += '.';
+        if (history.textContent !== '') {
+            history.textContent += '.';
+        }
+    }
+}
+
 buttons.forEach(button => {
     button.addEventListener('click', event => {
         const buttonValue = button.textContent;
 
-
-        if (inputcontenairs.value.length < 15 && historique.textContent.length < 25) {
-            // Vérifier si le bouton est un chiffre ou un opérateur
-
+        if (input.value.length < 15 && history.textContent.length < 25) {
             if (buttonValue >= '0' && buttonValue <= '9') {
-                // Ajouter le chiffre au champ de saisie
-                // limiter le nombre de caractères saisis dans le champ de saisie à 10
-                if (inputcontenairs.value === '0' && buttonValue === '0') {
-                    inputcontenairs.value = inputcontenairs.value;
-                } else {
-                    if (!historique.textContent.includes('=')) {
-                        expression += buttonValue;
-                        inputcontenairs.value += buttonValue;
-                        historique.textContent += buttonValue;
-                        // affichageText += buttonValue;
-                    } else {
-                        inputcontenairs.value = '';
-                        historique.textContent = '';
-                        expression = '';
-                        inputcontenairs.value += buttonValue;
-                        historique.textContent += buttonValue;
-                        expression += buttonValue;
-                    }
-
-                    // if (!isFirstNumberDisplayed) {
-                    //     historique.style.display = 'none';
-                    // } else {
-                    //     historique.style.display = 'block';
-
-                    // }
-                }
-
+                handleNumberInput(buttonValue);
             } else {
-                // Vérifier si le champ de saisie n'est pas vide
-
-                if (inputcontenairs.value !== '') {
-                    //  Vérifier l'opérateur et effectuer le calcul correspondant
+                if (input.value !== '') {
                     switch (buttonValue) {
                         case '+':
-                            // isFirstNumberDisplayed = true;
-                            // // if(inputcontenairs.value.includes(':','*', '+', ))
-                            inputcontenairs.value = '';
-                            if (!historique.textContent.includes('=')) {
-                                historique.textContent += " + "
-                            } else {
-                                historique.textContent = expression + '+'
-                            }
-                            expression += '+';
-
-                            event.preventDefault();
-                            break;
                         case '-':
-                            inputcontenairs.value = '';
-                            if (!historique.textContent.includes('=')) {
-                                historique.textContent += " - "
-                            } else {
-                                historique.textContent = expression + '-'
-                            }
-
-                            expression += '-';
-                            event.preventDefault();
-                            break;
                         case '×':
-                            inputcontenairs.value = '';
-                            if (!historique.textContent.includes('=')) {
-                                historique.textContent += " * "
-                            } else {
-                                historique.textContent = expression + ' x '
-                            }
-
-                            expression += '*';
-                            event.preventDefault();
-                            break;
                         case '÷':
-                            inputcontenairs.value = '';
-                            if (!historique.textContent.includes('=')) {
-                                historique.textContent += " ÷ "
-                            } else {
-                                historique.textContent = expression + ' ÷ '
-                            }
-
-                            expression += '/';
-
-                            event.preventDefault();
+                            handleOperatorInput(buttonValue);
                             break;
                         case '%':
-                            inputcontenairs.value = eval(expression) / 100;
-                            historique.textContent = eval(expression) / 100 + "% "
-                            event.preventDefault();
+                            handlePercentInput();
                             break;
-
                         case '=':
-                            if (!historique.textContent.includes('=')) {
-                                //// Évaluer l'expression mathématique et afficher le résultat
-
-                                // const valeurAdd = eval(expression);
-                                expression = eval(expression);
-                                historique.textContent += " = "
-                                // historique.insertAdjacentHTML('beforeend', '<br>');
-
-                                if (expression == "Infinity") {
-                                    inputcontenairs.value = "Error";
-                                } else {
-                                    inputcontenairs.value = expression;
-                                }
-
-
-                                // event.preventDefault();
-                                break;
-                            } else {
-                                expression = eval(valeurAdd + expression);
-                                break;
-                            }
-
+                            handleEqualInput();
+                            break;
                         case 'AC':
-                            //Effacer le champ de saisie
-                            inputcontenairs.value = '';
-                            historique.textContent = " ";
-                            expression = '';
-                            event.preventDefault();
+                            handleAcInput();
                             break;
                         case 'C':
-                            // Supprimer le dernier caractère du champ de saisie
-
-                            inputcontenairs.value = inputcontenairs.value.slice(0, -1);
-                            expression = inputcontenairs.value;
-
-                            event.preventDefault();
+                            handleCInput();
                             break;
                         case '+/-':
-                            // Inverser le signe du nombre dans le champ de saisie
-                            inputcontenairs.value = -inputcontenairs.value;
-                            expression = -expression;
-                            event.preventDefault();
+                            handleNegationInput();
                             break;
-
                         case '.':
-
-                            if (!inputcontenairs.value.includes('.')) {
-                                inputcontenairs.value += '.';
-                                // historique.textContent += ".";
-                                expression += '.';
-                                if (historique.textContent !== "") {
-                                    historique.textContent += ".";
-                                }
-
-                            }
+                            handleDecimalInput();
+                            break;
                     }
-                } else if (buttonValue === 'AC') {
-                    inputcontenairs.value = '';
-                    historique.textContent = " ";
-                    expression = '';
-                } else if (buttonValue >= '0' && buttonValue <= '9' && historique.textContent.includes('=')) {
-
-                    expression = calculate(expression);
-                    historique.textContent = expression;
-
                 }
             }
         }
-        console.log(expression);
     });
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { calculate } from './calculator.js';
+
+// const input = document.getElementById('input');
+// const buttons = document.querySelectorAll('button');
+// const history = document.querySelector('p');
+// let expression = '';
+
+// document.querySelector('form').addEventListener('submit', event => {
+//   event.preventDefault();
+// });
+
+// input.disabled = true;
+
+// function handleNumberInput(buttonValue) {
+//   if (input.value === '0') {
+//     input.value = buttonValue;
+//     expression = buttonValue;
+//     history.textContent = buttonValue;
+//   } else {
+//     input.value += buttonValue;
+//     expression += buttonValue;
+//     history.textContent += buttonValue;
+//   }
+// }
+
+// function handleOperatorInput(buttonValue) {
+//   input.value = '';
+//   expression += buttonValue === '×' ? '*' : buttonValue === '÷' ? '/' : buttonValue;
+//   history.textContent = !history.textContent.includes('=') ? `${history.textContent} ${buttonValue} ` : `${expression.replace(/\*/g, '×').replace(/\//g, '÷')}  `;
+// }
+
+// function handlePercentInput() {
+//   input.value = eval(expression) / 100;
+//   history.textContent = `${eval(expression) / 100}% `;
+// }
+
+// function handleEqualInput() {
+//   if (!history.textContent.includes('=')) {
+//     expression = eval(expression);
+//     input.value = expression === Infinity ? 'Error' : expression.toString();
+//     history.textContent += ` = `;
+//   } else {
+//     expression = eval(`${expression.replace(/\*/g, '×').replace(/\//g, '÷')} ${input.value}`);
+//     input.value = expression === Infinity ? 'Error' : expression.toString();
+//     history.textContent = `${expression.replace(/\*/g, '×').replace(/\//g, '÷')}  = `;
+//   }
+// }
+
+// function handleAcInput() {
+//   input.value = '0';
+//   history.textContent = '';
+//   expression = '';
+// }
+
+// function handleCInput() {
+//   input.value = input.value.slice(0, -1);
+//   expression = input.value;
+//   history.textContent = history.textContent.slice(0, -1);
+// }
+
+// function handleNegationInput() {
+//   input.value = -input.value;
+//   expression = -expression;
+// }
+
+// function handleDecimalInput() {
+//   if (!input.value.includes('.')) {
+//     input.value += '.';
+//     expression += '.';
+//     if (history.textContent !== '') {
+//       history.textContent += '.';
+//     }
+//   }
+// }
+
+// buttons.forEach(button => {
+//   button.addEventListener('click', event => {
+//     const buttonValue = button.textContent;
+
+//     if (input.value.length < 15 && history.textContent.length < 25) {
+//       if (buttonValue >= '0' && buttonValue <= '9') {
+//         handleNumberInput(buttonValue);
+
+
+  
+//       } else {
+
+// if (input.value !== '' || buttonValue === '-'|| buttonValue === '+'|| buttonValue === '×'|| buttonValue === '÷') {
+//     handleOperatorInput(buttonValue);
+//   }
+//         switch (buttonValue) {
+//           case '+':
+//           case '-':
+//           case '×':
+//           case '÷':
+//             handleOperatorInput(buttonValue);
+//             break;
+//           case '%':
+//             handlePercentInput();
+//             break;
+//           case '=':
+//             handleEqualInput();
+//             break;
+//           case 'AC':
+//             handleAcInput();
+//             break;
+//           case 'C':
+//             handleCInput();
+//             break;
+//           case '+/-':
+//             handleNegationInput();
+//             break;
+//           case '.':
+//             handleDecimalInput();
+//             break;
+//         }
+//       }
+//     }
+//   });
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { calculate } from './calculator.js';
+
+// const input = document.getElementById('input');
+// const buttons = document.querySelectorAll('button');
+// const history = document.querySelector('p');
+// let expression = '';
+
+// document.querySelector('form').addEventListener('submit', event => {
+//   event.preventDefault();
+// });
+
+// input.disabled = true;
+
+// function handleNumberInput(buttonValue) {
+//   if (input.value === '0') {
+//     input.value = buttonValue;
+//     expression = buttonValue;
+//     history.textContent = buttonValue;
+//   } else {
+//     input.value += buttonValue;
+//     expression += buttonValue;
+//     history.textContent += buttonValue;
+//   }
+// }
+
+// function handleOperatorInput(buttonValue) {
+//   if (expression.slice(-1) === '+' || expression.slice(-1) === '-' || expression.slice(-1) === '×' || expression.slice(-1) === '÷') {
+//     expression = expression.slice(0, -1) + buttonValue;
+//     history.textContent = history.textContent.slice(0, -2) + `${buttonValue} `;
+//   } else {
+//     input.value = '';
+//     expression += buttonValue === '×' ? '*' : buttonValue === '÷' ? '/' : buttonValue;
+//     history.textContent = !history.textContent.includes('=') ? `${history.textContent} ${buttonValue} ` : `${expression.replace(/\*/g, '×').replace(/\//g, '÷')} ${buttonValue} `;
+//   }
+// }
+
+// function handlePercentInput() {
+//   input.value = eval(expression) / 100;
+//   history.textContent = `${eval(expression) / 100}% `;
+// }
+
+// function handleEqualInput() {
+//   if (!history.textContent.includes('=')) {
+//     expression = eval(expression);
+//     input.value = expression === Infinity ? 'Error' : expression.toString();
+//     history.textContent += `= ${input.value}`;
+//   } else {
+//     expression = eval(`${expression.replace(/\*/g, '×').replace(/\//g, '÷')} ${input.value}`);
+//     input.value = expression === Infinity ? 'Error' : expression.toString();
+//     history.textContent = `${expression.replace(/\*/g, '×').replace(/\//g, '÷')} = ${input.value}`;
+//   }
+// }
+
+// function handleAcInput() {
+//   input.value = '0';
+//   history.textContent = '';
+//   expression = '';
+// }
+
+// function handleCInput() {
+//   input.value = input.value.slice(0, -1);
+//   expression = input.value;
+// }
+
+// function handleNegationInput() {
+//   input.value = -input.value;
+//   expression = -expression;
+// }
+
+// function handleDecimalInput() {
+//   if (!input.value.includes('.')) {
+//     input.value += '.';
+//     expression += '.';
+//     if (history.textContent !== '') {
+//       history.textContent += '.';
+//     }
+//   }
+// }
+
+// buttons.forEach(button => {
+//   button.addEventListener('click', event => {
+//     const buttonValue = button.textContent;
+
+//     if (input.value.length < 15 && history.textContent.length < 25) {
+//       if (buttonValue >= '0' && buttonValue <= '9') {
+//         handleNumberInput(buttonValue);
+//       } else {
+//         if (input.value !== '' || buttonValue === '-'|| buttonValue === '+'|| buttonValue === '×'|| buttonValue === '÷') {
+//           handleOperatorInput(buttonValue);
+//         }
+//       }
+//     }
+    
+//     switch (buttonValue) {
+//       case '%':
+//         handlePercentInput();
+//         break;
+//       case '=':
+//         handleEqualInput();
+//         break;
+//       case 'AC':
+//         handleAcInput();
+//         break;
+//       case 'C':
+//         handleCInput();
+//         break;
+//       case '+/-':
+//         handleNegationInput();
+//         break;
+//       case '.':
+//         handleDecimalInput();
+//         break;
+//       default:
+//         break;
+//     }
+//   });
+// });
