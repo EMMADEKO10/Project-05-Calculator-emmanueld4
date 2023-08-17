@@ -113,6 +113,27 @@ buttons.forEach(button => {
 });
 
 
+document.addEventListener('keydown', event => {
+    const key = event.key;
+
+    if (/[0-9]/.test(key)) {
+        handleNumberInput(key);
+    } else if (/[\+\-\*\/]/.test(key)) {
+        handleOperatorInput(key === '*' ? '×' : key === '/' ? '÷' : key);
+    } else if (key === '%') {
+        handlePercentInput();
+    } else if (key === '=' || key === 'Enter') {
+        handleEqualInput();
+    } else if (key === 'Escape') {
+        handleAcInput();
+    } else if (key === 'Backspace') {
+        handleCInput();
+    } else if (key === '.') {
+        handleDecimalInput();
+    }
+});
+
+
 
 
 
