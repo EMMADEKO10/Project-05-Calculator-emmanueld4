@@ -7,8 +7,14 @@ const inputcontenairs = document.getElementById('input');
 const buttons = document.querySelectorAll('button');
 const historique = document.querySelector('p');
 let expression = '';
-let affichageHist = '';
-let operator = "";
+
+const form = document.querySelector('form');
+
+form.addEventListener('submit', event => {
+    event.preventDefault();
+
+    // Votre code de traitement ici
+});
 
 //Bloquer le display pour n'entrer que les valeurs via les bouttons.
 inputcontenairs.disabled = true;
@@ -18,56 +24,44 @@ inputcontenairs.disabled = true;
 buttons.forEach(button => {
     button.addEventListener('click', event => {
         const buttonValue = button.textContent;
-        const number1 = "";
-        const number2 = "";
 
         // Vérifier si le bouton est un chiffre ou un opérateur
 
         if (buttonValue >= '0' && buttonValue <= '9') {
             // Ajouter le chiffre au champ de saisie
-            if (inputcontenairs.value === '0' && buttonValue === '0') {
-                inputcontenairs.value = inputcontenairs.value;
-
-
-            } else if(inputcontenairs.value === '0'){
-                inputcontenairs.value = buttonValue;
-                historique.textContent = buttonValue;
-            }
-            else{
-                // Gérer lorsque l'utilisateur veut entre un autre exercice.
-
-                if (!historique.textContent.includes('=')) {
-                    expression += buttonValue;
-                    inputcontenairs.value += buttonValue;
-                    affichageHist += buttonValue;
-                    historique.textContent += buttonValue;
-                     operator += buttonValue;
+            if (inputcontenairs.value.length < 16) { // limiter le nombre de caractères saisis dans le champ de saisie à 10
+                if (inputcontenairs.value === '0' && buttonValue === '0') {
+                    inputcontenairs.value = inputcontenairs.value;
                 } else {
-                    inputcontenairs.value = '';
-                    historique.textContent = '';
-                    expression = '';
-                    inputcontenairs.value += buttonValue;
-                    historique.textContent += buttonValue;
-                    expression += buttonValue;
-                     operator += buttonValue;
+                    if (!historique.textContent.includes('=')) {
+                        expression += buttonValue;
+                        inputcontenairs.value += buttonValue;
+                        historique.textContent += buttonValue;
+                    } else {
+                        inputcontenairs.value = '';
+                        historique.textContent = '';
+                        expression = '';
+                        inputcontenairs.value += buttonValue;
+                        historique.textContent += buttonValue;
+                        expression += buttonValue;
+                    }
+
                 }
-                affichageHist += buttonValue;
+
             }
-
-
         } else {
             // Vérifier si le champ de saisie n'est pas vide
-            operator += buttonValue;
+
             if (inputcontenairs.value !== '') {
                 //  Vérifier l'opérateur et effectuer le calcul correspondant
                 switch (buttonValue) {
                     case '+':
+                        // if(inputcontenairs.value.includes(':','*', '+', ))
                         inputcontenairs.value = '';
-                        
                         if (!historique.textContent.includes('=')) {
                             historique.textContent += " + "
                         } else {
-                            historique.textContent = expression + ' + ';
+                            historique.textContent = expression + '+'
                         }
 
                         expression += '+';
@@ -140,6 +134,7 @@ buttons.forEach(button => {
 
                         inputcontenairs.value = inputcontenairs.value.slice(0, -1);
                         expression = inputcontenairs.value;
+
                         event.preventDefault();
                         break;
                     case '+/-':
@@ -153,7 +148,7 @@ buttons.forEach(button => {
 
                         if (!inputcontenairs.value.includes('.')) {
                             inputcontenairs.value += '.';
-                            historique.textContent += ".";
+                            // historique.textContent += ".";
                             expression += '.';
 
                         }
@@ -168,13 +163,9 @@ buttons.forEach(button => {
                 historique.textContent = expression;
 
             }
-            else if (inputcontenairs.textContent === "" && isNaN(historique.textContent.slice(-1))){
-                    historique.textContent = historique.textContent.slice(0, -1) + "+";
-                    operator = operator.slice(0, -1) + "+";
-                    // event.preventDefault();
-                    }
         }
         console.log(expression);
     });
 });
+
 
