@@ -36,14 +36,17 @@ buttons.forEach(button => {
                     if (!historique.textContent.includes('=')) {
                         expression += buttonValue;
                         inputcontenairs.value += buttonValue;
-                        historique.textContent += buttonValue;
+                        // historique.textContent += buttonValue;
                     } else {
                         inputcontenairs.value = '';
                         historique.textContent = '';
                         expression = '';
                         inputcontenairs.value += buttonValue;
-                        historique.textContent += buttonValue;
+                        
                         expression += buttonValue;
+                    }
+                    if(!/[\+\-\*\/]/.test(expression.slice(-1))){
+                        historique.textContent += expression;
                     }
 
                 }
